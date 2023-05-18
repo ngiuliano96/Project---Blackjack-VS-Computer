@@ -36,8 +36,6 @@ def blackjack():
         for card in hand_of_cards:
             if card == 11 and score + 11 > 21:
                 score += 1
-            elif score + card == 21 and len(hand_of_cards) == 2:
-                return 0
             else:
                score += card
         return score
@@ -65,20 +63,29 @@ def blackjack():
         print(divider)
         
         draw_again = input("Type 'y' to get another card, type 'n' to pass: ").lower()
-        if draw_again == "y" and player_score <= 21 and player_score != 0 and computer_score != 0:
+        if draw_again == "y" or draw_again == "yes":
             # Draw card and add to player hand
             player_hand.append(deal_card())
             player_score = calc_score(player_hand)
             
-            # Display scores             
+            # Display scores
             display_score(player_hand, player_score, 'cont', True)
             display_score(computer_hand, computer_score, 'cont', False)
-             
+            
             print(divider)
             
+            # Check if player went over 21
+            if player_score > 21:
+                display_score(player_hand, player_score, 'end', True)
+                display_score(computer_hand, computer_score, 'end', False)
+
+                print(divider)
+                
+                print("You went over! You lose.")
+                drawing_cards = False
         else:
             # Draw cards for computer until score > 17
-            while computer_score != 0 and computer_score < 17:
+            while computer_score < 17:
                 computer_hand.append(deal_card())
                 computer_score = calc_score(computer_hand)
                 
@@ -88,17 +95,9 @@ def blackjack():
             print(divider)
             
             # Determine if the player wins
-            if player_score == computer_score:
+            if player_score == computer_score and player_score <= 21:
                 print("Draw.")
-            elif computer_score == 0:
-                print("Dealer got a Blackjack! You lose.")
-            elif player_score == 0:
-                print("You got a Blackjack! You win.")
-            elif player_score > 21:
-                print("You went over 21! You lose.")
-            elif computer_score > 21:
-                print("Computer went over 21! You win.")
-            elif player_score > computer_score:
+            elif player_score > computer_score and player_score <= 21 or player_score <= 21 and computer_score > 21:
                 print("You win!")
             else:
                 print("You lose.")
@@ -112,7 +111,7 @@ def blackjack():
 
     print(divider)
 
-    if play_again == "y":
+    if play_again == "y" or play_again == "yes":
         blackjack()
     else:
         print("OK then, see you later!")
