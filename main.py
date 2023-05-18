@@ -65,7 +65,7 @@ def blackjack():
         print(divider)
         
         draw_again = input("Type 'y' to get another card, type 'n' to pass: ").lower()
-        if draw_again == "y" or draw_again == "yes":
+        if draw_again == "y" or draw_again == "yes" and player_score != 0 and computer_score != 0:
             # Draw card and add to player hand
             player_hand.append(deal_card())
             player_score = calc_score(player_hand)
